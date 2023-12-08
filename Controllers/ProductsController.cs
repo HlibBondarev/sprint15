@@ -52,8 +52,37 @@ namespace ProductsValidation.Controllers
             myProducts[myProducts.FindIndex(prod => prod.Id == product.Id)] = product;
             return View(product);
         }
+        public IActionResult EditPricesByCategory(Product.Category selectedCategory)
+        {
+            if (selectedCategory != null)
+            {
+                List<Product> filteredProducts = myProducts.Where(p => p.Type == selectedCategory).ToList();
+                return View(filteredProducts);
+            }
+            return View("Error");
+        }
 
-        
+        [HttpPost]
+        public IActionResult EditPricesByCategory(List<Product> products)
+        {
+            if (ModelState.IsValid)
+            {
+                foreach (var product in products)
+                {
+                    var index = myProducts.FindIndex(p => p.Id == product.Id);
+                    if (index != -1)
+                    {
+                        myProducts[index].Price = product.Price;
+                    }
+                }
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return View(products);
+            }
+        }
+
         [HttpPost]
         public IActionResult Create(Product product)
         {

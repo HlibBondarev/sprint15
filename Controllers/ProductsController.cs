@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -12,13 +12,6 @@ using static ProductsValidation.Models.Product;
 
 namespace ProductsValidation.Controllers
 {
-    // After clicking on Save button:
-    // + if there are no validation errors - the product should be saved and displayed in View(details) mode
-    // + othervise validation errors should be displayed on the same page
-    // TODO: validation for Action - Edit:
-    // TODO: 1. Create private method GetCategories() for getting SelectList of Categories of Type property.
-    // TODO: 2. Change actions - add validation to the Create and Edit methods.
-
     public class ProductsController : Controller
     {
         private readonly List<Product> myProducts;
@@ -67,7 +60,36 @@ namespace ProductsValidation.Controllers
             GetCategories();
             return View(product);
         }
+        public IActionResult EditPricesByCategory(Product.Category selectedCategory)
+        {
+            if (selectedCategory != null)
+            {
+                List<Product> filteredProducts = myProducts.Where(p => p.Type == selectedCategory).ToList();
+                return View(filteredProducts);
+            }
+            return View("Error");
+        }
 
+        [HttpPost]
+        public IActionResult EditPricesByCategory(List<Product> products)
+        {
+            if (ModelState.IsValid)
+            {
+                foreach (var product in products)
+                {
+                    var index = myProducts.FindIndex(p => p.Id == product.Id);
+                    if (index != -1)
+                    {
+                        myProducts[index].Price = product.Price;
+                    }
+                }
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return View(products);
+            }
+        }
 
         [HttpPost]
         public IActionResult Create(Product product)

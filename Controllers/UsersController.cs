@@ -23,5 +23,28 @@ namespace ProductsValidation.Controllers
         {
             return View("Index", users);
         }
+        [HttpGet]
+        public IActionResult Create(int id, string name, string email, string role)
+        {
+            var newUser = new User
+            {
+                Id = id,
+                Name = name,
+                Email = email,
+                Role = role
+            };
+
+            return View(newUser);
+        }
+
+        [HttpPost]
+        public IActionResult Create(User newUser)
+        {
+
+            users.Add(newUser);
+
+
+            return RedirectToAction("Index");
+        }
     }
 }

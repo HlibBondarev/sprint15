@@ -1,5 +1,6 @@
 ﻿@model ProductsValidation.Models.Product
-
+@* TODO: 1. Add attribute readonly="@(true) in <input asp-for="Id" ...>   *@
+@* TODO: 2  Create <select asp-for="Type"...> and add attribute - asp-items="@ViewBag.Types"*@
 @{
     ViewData["Title"] = "Create";
 }
@@ -14,12 +15,12 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Id" class="control-label"></label>
-                <input asp-for="Id" class="form-control" />
+                <input asp-for="Id" readonly="@(true) class="form-control" />
                 <span asp-validation-for="Id" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Type" class="control-label"></label>
-                <input asp-for="Type" class="form-control" />
+                <select asp-for="Type" asp-items="@ViewBag.Types" class="form-control"></select>
                 <span asp-validation-for="Type" class="text-danger"></span>
             </div>
             <div class="form-group">

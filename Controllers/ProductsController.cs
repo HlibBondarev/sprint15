@@ -37,9 +37,9 @@ namespace ProductsValidation.Controllers
             return View("NotExists");
         }
 
-
-        [HttpGet]
-        public IActionResult Edit(int id)
+		#region Edit action
+        [HttpGet] 
+		public IActionResult Edit(int id)
         {
             Product prod = myProducts.Find(prod => prod.Id == id);
             if (prod != null)
@@ -60,6 +60,7 @@ namespace ProductsValidation.Controllers
             GetCategories();
             return View(product);
         }
+
         public IActionResult EditPricesByCategory(Product.Category selectedCategory)
         {
             if (selectedCategory != null)
@@ -90,8 +91,10 @@ namespace ProductsValidation.Controllers
                 return View(products);
             }
         }
+		#endregion
 
-        [HttpPost]
+		#region Create Action
+		[HttpPost]
         public IActionResult Create(Product product)
         {
             if (ModelState.IsValid)
@@ -108,8 +111,9 @@ namespace ProductsValidation.Controllers
             GetCategories();
             return View(new Product() { Id = myProducts.Last().Id + 1 });
         }
+		#endregion
 
-        public IActionResult Delete(int id)
+		public IActionResult Delete(int id)
         {
             myProducts.Remove(myProducts.Find(product => product.Id == id));
             return View("Index", myProducts);
